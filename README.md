@@ -23,7 +23,8 @@ A full-stack food delivery order management system with real-time order tracking
 ### Frontend
 - React 18 with Vite
 - React Router for navigation
-- Vitest + React Testing Library for testing
+- Vitest + React Testing Library for component testing
+- Playwright for end-to-end testing
 - Socket.IO-client for real-time order updates
 
 ## Prerequisites
@@ -120,17 +121,42 @@ socket.emit('leave-order', orderId);
 
 ## Testing
 
-### Backend Tests
+### Backend Tests (Unit/Integration)
 ```bash
 cd backend
 npm test
 ```
 
-### Frontend Tests
+### Frontend Component Tests (Unit)
 ```bash
 cd frontend
 npm test
 ```
+
+### Frontend E2E Tests (Playwright)
+```bash
+cd frontend
+
+# Run all E2E tests
+npm run test:e2e
+
+# Run with UI mode (interactive)
+npm run test:e2e:ui
+
+# Run in headed mode (see browser)
+npm run test:e2e:headed
+
+# Debug mode
+npm run test:e2e:debug
+```
+
+E2E tests cover:
+- Menu browsing and item display
+- Adding items to cart
+- Cart operations (update quantity, remove items)
+- Checkout flow with form validation
+- Order status page
+- Complete user journey from menu to delivery
 
 ## Project Structure
 
@@ -151,7 +177,8 @@ order-management-system/
     │   ├── hooks/          # Custom hooks (useSocket)
     │   ├── services/       # API client
     │   └── App.jsx         # Main app
-    └── tests/              # Frontend tests
+    ├── tests/              # Component tests (Vitest)
+    └── e2e/                # E2E tests (Playwright)
 ```
 
 ## Order Status Flow
