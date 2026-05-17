@@ -3,8 +3,32 @@ import MenuItem, { IMenuItem } from '../models/menuItemModel.js';
 
 export const getAllMenuItems = async (req: Request, res: Response): Promise<void> => {
   try {
-    const menuItems: IMenuItem[] = await MenuItem.find().sort({ name: 1 });
-    res.json(menuItems);
+    const page = parseInt(req.query.page as string) || 1;
+    const pageSize = parseInt(req.query.pageSize as string) || 6;
+    const skip = (page - 1) * pageSize;
+
+    const [menuItems, totalItems] = await Promise.all([
+      MenuItem.find()
+        .sort({ name: 1 })
+        .skip(skip)
+        .limit(pageSize)
+        .lean(),
+      MenuItem.countDocuments()
+    ]);
+
+    const totalPages = Math.ceil(totalItems / pageSize);
+    const hasMore = page < totalPages;
+
+    res.json({
+      items: menuItems,
+      pagination: {
+        page,
+        pageSize,
+        totalItems,
+        totalPages,
+        hasMore
+      }
+    });
   } catch (error) {
     res.status(500).json({ error: 'Failed to fetch menu items' });
   }
@@ -87,6 +111,66 @@ export const seedMenuItems = async (): Promise<void> => {
       description: 'Freshly brewed iced tea with lemon',
       price: 2.99,
       imageUrl: 'https://picsum.photos/400/300?random=10',
+    },
+    {
+      name: 'Veggie Pizza',
+      description: 'Pizza with bell peppers, onions, mushrooms, and olives',
+      price: 13.99,
+      imageUrl: 'https://picsum.photos/400/300?random=11',
+    },
+    {
+      name: 'BBQ Bacon Burger',
+      description: 'Burger with crispy bacon, BBQ sauce, and onion rings',
+      price: 13.99,
+      imageUrl: 'https://picsum.photos/400/300?random=12',
+    },
+    {
+      name: 'Mushroom Soup',
+      description: 'Creamy mushroom soup with fresh herbs',
+      price: 6.99,
+      imageUrl: 'https://picsum.photos/400/300?random=13',
+    },
+    {
+      name: 'Garlic Bread',
+      description: 'Toasted bread with garlic butter and herbs',
+      price: 5.99,
+      imageUrl: 'https://picsum.photos/400/300?random=14',
+    },
+    {
+      name: 'Chicken Tenders',
+      description: 'Crispy chicken tenders with honey mustard sauce',
+      price: 9.99,
+      imageUrl: 'https://picsum.photos/400/300?random=15',
+    },
+    {
+      name: 'Fish & Chips',
+      description: 'Beer-battered fish with crispy fries and tartar sauce',
+      price: 14.99,
+      imageUrl: 'https://picsum.photos/400/300?random=16',
+    },
+    {
+      name: 'Onion Rings',
+      description: 'Crispy battered onion rings with dipping sauce',
+      price: 5.99,
+      imageUrl: 'https://picsum.photos/400/300?random=17',
+    },
+    {
+      name: 'Vanilla Shake',
+      description: 'Classic vanilla milkshake made with real ice cream',
+      price: 5.99,
+      imageUrl: 'https://picsum.photos/400/300?random=18',
+    },
+    {
+      name: 'Strawberry Shake',
+      description: 'Fresh strawberry milkshake with whipped cream',
+      price: 6.99,
+      imageUrl: 'https://picsum.photos/400/300?random=19',
+    },
+    {
+      name: 'Lemonade',
+      description: 'Fresh squeezed lemonade with mint',
+      price: 3.49,
+      imageUrl: 'https://picsum.photos/400/300?random=20',
     },
   ];
 

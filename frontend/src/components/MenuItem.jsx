@@ -1,8 +1,9 @@
 import PropTypes from 'prop-types';
+import { forwardRef } from 'react';
 
-export const MenuItem = ({ item, onAddToCart }) => {
+export const MenuItem = forwardRef(({ item, onAddToCart }, ref) => {
   return (
-    <div className="menu-item">
+    <div className="menu-item" ref={ref}>
       <img src={item.imageUrl} alt={item.name} className="menu-item-image" />
       <div className="menu-item-content">
         <h3 className="menu-item-name">{item.name}</h3>
@@ -19,7 +20,9 @@ export const MenuItem = ({ item, onAddToCart }) => {
       </div>
     </div>
   );
-};
+});
+
+MenuItem.displayName = 'MenuItem';
 
 MenuItem.propTypes = {
   item: PropTypes.shape({
