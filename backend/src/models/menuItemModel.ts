@@ -35,4 +35,8 @@ const menuItemSchema: Schema = new mongoose.Schema(
   },
 );
 
+menuItemSchema.index({ name: 1 });
+menuItemSchema.index({ price: 1 });
+menuItemSchema.index({ createdAt: -1 });
+
 export default mongoose.model<IMenuItem>("MenuItem", menuItemSchema);

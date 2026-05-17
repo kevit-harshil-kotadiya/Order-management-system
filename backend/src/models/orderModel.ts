@@ -80,4 +80,10 @@ const orderSchema: Schema = new mongoose.Schema(
   },
 );
 
+orderSchema.index({ status: 1 });
+orderSchema.index({ customerName: 1 });
+orderSchema.index({ phone: 1 });
+orderSchema.index({ createdAt: -1 });
+orderSchema.index({ totalAmount: 1 });
+
 export default mongoose.model<IOrder>("Order", orderSchema);
