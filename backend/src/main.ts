@@ -21,7 +21,7 @@ const httpServer = createServer(app);
 initializeSocket(httpServer);
 
 // Middleware
-app.use(cors());
+app.use(cors({ origin: '*' }));
 app.use(express.json());
 
 // Routes
